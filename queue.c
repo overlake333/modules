@@ -56,10 +56,10 @@ static qElement_t *makeElement(void *elementp){
 }
 
 	
-/* create an empty queue */                                                                     
+/* create an empty queue */
+// Should be constant time
 queue_t* qopen(void){
 	queue_t *qt = (void*)makeQueue();
-	
 	return qt;
 }
                                                                                                 
@@ -99,22 +99,43 @@ queue_t* qopen(void){
 		 mqp->front = e;
 		 mqp->back = e;
 	 }else{
-		 // if queue is not empty update next of current back pointer and switch backpointer to new element
+		 // if queue is not empty update next of current back pointer and
+		 // switch backpointer to new element
 		 (mqp->back)->next = e;
 		 mqp->back = e;
 	 }
 	 return 0;
  }
-                                                                                                
-/* /\* get the first first element from queue, removing it from the queue *\/ */
-/* void* qget(queue_t *qp){ */
 
-/* } */
-                                                                                                
-/* /\* apply a function to every element of the queue *\/ */
-/* void qapply(queue_t *qp, void (*fn)(void* elementp)){ */
+/* get the first first element from queue, removing it from the queue*/
 
-/* } */
+void* qget(queue_t *qp){
+	// coerce the queue object back into a myQueue
+	myQueue_t *mqp = (myQueue_t*)qp;
+	//create a pointer to the first element
+	qElement_t *first = mqp->front;
+	// Set the front pointer to the second element
+	mqp->front = first->next;
+	// Grab the value of first, because what the user actually wants is the value
+	void *val = first->value;
+	// free up first
+	free(first);
+	// return the pointer to the value
+	return(val);
+	
+} 
+                                                                                                
+/*     apply a function to every element of the queue *\/ */
+void qapply(queue_t *qp, void (*fn)(void* elementp)){
+	// as always, coerce the queue into our queue data structure!
+	myQueue_t *mqp = (myQueue_t*)qp;
+	// loop through the queue 
+	qElement_t *p;
+	for (p = mqp->front ; p != NULL ; p = p->next){
+		void *v = (void*)(p->value);
+		fn(v);
+	}
+} 
                                                                                                 
 /* /\* search a queue using a supplied boolean function */
 /*  * skeyp -- a key to search for */
@@ -141,12 +162,21 @@ queue_t* qopen(void){
 
 /* } */
                                                                                                 
-/* /\* concatenatenates elements of q2 into q1 */
-/*  * q2 is dealocated, closed, and unusable upon completion */
-/*  *\/ */
-/* void qconcat(queue_t *q1p, queue_t *q2p){ */
+/* concatenatenates elements of q2 into q1 */
+/* q2 is dealocated, closed, and unusable upon completion */
 
-/* } */
+void qconcat(queue_t *q1p, queue_t *q2p){
+	myQueue_t *mqp1 = (myQueue_t*)q1p;
+	myQueue_t *mqp2 = (myQueue_t*)q2p;
+	// next pointer of back of q1 to be front of q2
+	(mqp1->back)->next = mqp2->front;
+	//back of q2 to be the back of q1
+	mqp1->back = mqp2->back;
+
+	// now just delete q2p
+	qclose(q2p);
+	
+} 
                                                                                                 
                                                                                                 
                                                                 

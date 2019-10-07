@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//typdef struct person
 
 int main(void){
 

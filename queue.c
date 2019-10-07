@@ -14,6 +14,8 @@
 #include <stdbool.h>                                                                            
 #include <stdio.h>
 #include <stdlib.h>
+#include <bool.h>
+
 
 typedef struct qElement_t {
 	// every element holds a value which can be anything (double, car, person, cat) and a next Pointer
@@ -63,8 +65,10 @@ queue_t* qopen(void){
 	return qt;
 }
                                                                                                 
+
 /* deallocate a queue, frees everything in it */
- void qclose(queue_t *qp){
+
+void qclose(queue_t *qp){
 	 // Loop through all the elements of the queue freeing them up
 	 myQueue_t *mqp = (myQueue_t*)qp; //Switching queue_t to myQueue_t here
 	 qElement_t *elementPointer = mqp->front;
@@ -79,6 +83,9 @@ queue_t* qopen(void){
 	 }
 	 // Finally free up the queue itself
 	 free(mqp);
+
+ 
+		 
 	 
  } 
                                                                                                 
@@ -114,6 +121,9 @@ void* qget(queue_t *qp){
 	// coerce the queue object back into a myQueue
 	myQueue_t *mqp = (myQueue_t*)qp;
 	//create a pointer to the first element
+	if (mqp->front == NULL){
+		return NULL;
+	}
 	qElement_t *first = mqp->front;
 	// Set the front pointer to the second element
 	mqp->front = first->next;
@@ -146,12 +156,28 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 /*  *             set to skey at each step of the search */
 /*  *          -- returns TRUE or FALSE as defined in bool.h */
 /*  * returns a pointer to an element, or NULL if not found */
-/*  *\/ */
-/* void* qsearch(queue_t *qp, */
-/*               bool (*searchfn)(void* elementp,const void* keyp), */
-/*               const void* skeyp){ */
 
-/* } */
+void* qsearch(queue_t *qp, 
+							bool (*searchfn)(void* elementp,const void* keyp), 
+							const void* skeyp){ 
+	myQueue_t *mqp = (myQueue_t*)qp;
+
+	// go through each item
+	qElement_t *p;
+	for (p = mqp->front ; p != NULL ; p = p->next){
+		void *v = (void*)(p->value);
+		if (searchfn(v, skeyp) == TRUE){
+			// return pointer to element if found
+			return(p);
+			
+		}
+		
+	}
+	// if we exit the loop with no success, then just return NULL!
+	return NULL;
+
+	
+}
                                                                                                 
 /* /\* search a queue using a supplied boolean function (as in qsearch), */
 /*  * removes the element from the queue and returns a pointer to it or */

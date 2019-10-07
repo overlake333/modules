@@ -86,6 +86,7 @@ queue_t* qopen(void){
 /*  * returns 0 is successful; nonzero otherwise */
 /*  *\/ */
  int32_t qput(queue_t *qp, void *elementp){
+	 // how can i test if it can correctly convert the queue
 	 myQueue_t *mqp = (myQueue_t*)qp;
 	 qElement_t *e;
 	 // make sure we can successfully make an qElement

@@ -14,20 +14,20 @@
 int main(void){
 	queue_t *qt;
 	qt = qopen();
+	queue_t *qt2;
+	qt2 = qopen();
 	if (qt == NULL){
-		printf("bad vibes all around\n");
-		
+		printf("failure creating queue\n");
 		exit(EXIT_FAILURE);
 	}
-	double x = 2.0;
-	
-	
-	if ((qput(qt,(void*)&x)) !=0){
-		printf("trouble putting in an item");
+	if (qt2 == NULL){
+		printf("failure creating a second queue\n");
 		exit(EXIT_FAILURE);
 	}
-	printf("success\n");
 
-	qclose(qt);
+	
+	free(qt);
+	free(qt2);
+	printf("testOpen succeeded\n");
 	exit(EXIT_SUCCESS);
 }

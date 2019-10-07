@@ -14,7 +14,7 @@
 #include <stdbool.h>                                                                            
 #include <stdio.h>
 #include <stdlib.h>
-#include <bool.h>
+#include <stdbool.h>
 
 
 typedef struct qElement_t {
@@ -67,7 +67,9 @@ queue_t* qopen(void){
                                                                                                 
 
 /* deallocate a queue, frees everything in it */
-
+void makeNULL(queue_t **qp){
+	*qp = NULL;
+}
 void qclose(queue_t *qp){
 	 // Loop through all the elements of the queue freeing them up
 	 myQueue_t *mqp = (myQueue_t*)qp; //Switching queue_t to myQueue_t here
@@ -82,11 +84,10 @@ void qclose(queue_t *qp){
 	 elementPointer = nextElement;
 	 }
 	 // Finally free up the queue itself
-	 free(mqp);
 
- 
-		 
-	 
+	 makeNULL(&qp);
+ 	 free(qp);
+
  } 
                                                                                                 
 /* put element at the end of the queue */
@@ -166,10 +167,9 @@ void* qsearch(queue_t *qp,
 	qElement_t *p;
 	for (p = mqp->front ; p != NULL ; p = p->next){
 		void *v = (void*)(p->value);
-		if (searchfn(v, skeyp) == TRUE){
-			// return pointer to element if found
-			return(p);
-			
+		if (searchfn(v, skeyp) == true){
+			// return pointer to element value if found
+			return(v);
 		}
 		
 	}
@@ -182,12 +182,40 @@ void* qsearch(queue_t *qp,
 /* /\* search a queue using a supplied boolean function (as in qsearch), */
 /*  * removes the element from the queue and returns a pointer to it or */
 /*  * NULL if not found */
-/*  *\/ */
-/* void* qremove(queue_t *qp, */
-/*               bool (*searchfn)(void* elementp,const void* keyp), */
-/*               const void* skeyp){ */
 
-/* } */
+void* qremove(queue_t *qp,
+							bool (*searchfn)(void* elementp,const void* keyp), 
+							const void* skeyp){ 
+	myQueue_t *mqp = (myQueue_t*)qp;
+
+	// go through each item
+	qElement_t *p;
+	qElement_t *previousp;
+	for (p = mqp->front ; p != NULL ; p = p->next){
+		void *v = (void*)(p->value);
+		if (searchfn(v, skeyp) == true){
+			// If element is FRONT
+			if (p == mqp->front){
+				mqp->front = p->next;
+				p->next = NULL;
+			}else if (p ==mqp-> back){
+				mqp->back = previousp;
+				previousp->next = NULL;
+			}else{
+				previousp->next=p->next;
+				p->next = NULL;
+			}
+			free(p);
+			return v;
+		}
+		previousp = p;
+	}
+	
+
+	// if we exit the loop with no success, then just return NULL!
+	return NULL;
+
+ } 
                                                                                                 
 /* concatenatenates elements of q2 into q1 */
 /* q2 is dealocated, closed, and unusable upon completion */

@@ -1,0 +1,7 @@
+runtest.sh "testOpen"
+runtest.sh "testClose"
+runtest.sh "testPut"
+runtest.sh "testGet"
+runtest.sh "testApply"
+runtest.sh "testSearch"
+runtest.sh "testCat"

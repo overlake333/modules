@@ -76,11 +76,8 @@ static myHash_t *makeHash(uint32_t hsize){
 
   ht->size = hsize;
   queue_t *table = malloc(hsize);
-
-
-  for(int i = 0; i < hsize; i++){
-    queue_t *temp = qopen();
-    table[i] = temp;
+ for(int i = 0; i < hsize; i++){
+(table+i) = qopen();
   }
 
   ht->table = table;
@@ -99,14 +96,12 @@ hashtable_t *hopen(uint32_t hsize){
 
 void hclose(hashtable_t *htp){
   myHash_t *ht = (myHash_t *)htp;
-	queue_t *i = (ht->table);
+	queue_t *i[ht->size] = (ht->table);
 	
-  for(int q = 0; q<ht->size; q++){
-   
-		
-
+  for(int q = 0; q < ht->size; q++){
+		qclose(i[q]);
   }
-  //free(ht);
+  free(ht);
 }
 
 

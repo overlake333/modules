@@ -12,14 +12,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void square(int *num){
-  *num *= *num;
+void square(void *num){
+  *(int *)num *= *(int *)num;
 }
 
 int main(void){
   queue_t *qt;
   qt = qopen();
-  int x = 2.0;
+  int x = 2;
   int y = 420;
   
   qput(qt,(void*)&x);
@@ -27,12 +27,11 @@ int main(void){
 
   qapply(qt, square);
 
-  int x2 = (int *)(qget(qt));
-  int y2 = (int *)(qget(qt));
-
-  if(((x*x) != x2) && ((y*y) != y2)){
+  int x2 = *(int *)(qget(qt));
+  int y2 = *(int *)(qget(qt));
+  if((4 != x2) && ((420*420) != y2)){
     printf("YOU HAVE FAILED THIS CITY!");
-    exit(EXIT_FAILED);
+    exit(EXIT_FAILURE);
   } 
   
   

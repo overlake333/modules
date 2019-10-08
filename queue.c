@@ -224,7 +224,7 @@ void qconcat(queue_t *q1p, queue_t *q2p){
 	mqp1->back = mqp2->back;
 
 	// now just delete q2p
-	qclose(q2p);
+	free(q2p);
 	
 } 
                                                                                                 

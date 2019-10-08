@@ -35,6 +35,20 @@ if [ ${sum} == 0 ] ; then
 else
 		echo "testGet Failed"
 fi
+valgrind --leak-check=full testApply |& grep "no leaks are possible"
+let "sum=sum+$?"
+if [ ${sum} == 0 ] ; then
+		echo "testApply Succeded"
+else
+		echo "testApply Failed"
+fi
+valgrind --leak-check=full testCat |& grep "no leaks are possible"
+let "sum=sum+$?"
+if [ ${sum} == 0 ] ; then
+		echo "testCat Succeded"
+else
+		echo "testCat Failed"
+fi
 if [ ${sum} == 0 ] ; then
 		echo "all tests ran with no leaks"
 		exit 0

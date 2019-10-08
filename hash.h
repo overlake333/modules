@@ -1,3 +1,4 @@
+
 #pragma once
 /*
  * hash.h -- A generic hash table implementation, allowing arbitrary

@@ -3,7 +3,10 @@
  *
  */
 #include <stdint.h>
-
+#include "queue.h"
+#include "hash.h"
+#include <stdio.h>
+#include <stdlib.h>
 /* 
  * SuperFastHash() -- produces a number between 0 and the tablesize-1.
  * 
@@ -13,6 +16,65 @@
  * Hash.
  */
 #define get16bits(d) (*((const uint16_t *) (d)))
+
+
+
+typedef struct myHash_t{
+  uint32_t size;
+  queue_t *table;
+
+  
+} myHash_t;
+
+
+static myHash_t *makeHash(uint32_t hsize){
+  myHash_t *ht;
+  if(!(ht = (myHash_t *)malloc(sizeof(myHash_t)))){
+    return NULL;
+  }
+
+  ht->size = hsize;
+  queue_t *table[hsize];
+
+
+  for(int i = 0; i < hsize; i++){
+    queue_t *temp = qopen();
+    table[i] = temp;
+  }
+
+  ht->table = table;
+  return ht;
+}
+
+hashtable_t *hopen(uint32_t hsize){
+  myHash_t *ht = makeHash(hsize);
+  if(ht != NULL){
+    return (hashtable_t *)ht;
+  }
+  else{
+    return NULL;
+  }
+}
+
+void hclose(hashtable_t *htp){
+  myHash_t *ht = (myHash_t *)htp;
+
+  for(int i = 0; i < ht->size; i++){
+    qclose(&(ht->table)+i);
+
+  }
+  free(ht);
+}
+
+
+int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
+  myHash_t *ht = (myHash_t *)htp;
+  uint32_t index = SuperFastHash(key, keylen, ht->size);
+
+  return qput(&((*ht).table)+index, ep);
+}
+
+
 
 static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
   uint32_t hash = len, tmp;

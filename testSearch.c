@@ -83,6 +83,10 @@ int main(void){
 
 	
 	qclose(qp);
+	free(person1);
+	free(person2);
+	free(person3);
+	free(person4);
 	printf("testSearch.c Succeeded\n");
 	exit(EXIT_SUCCESS);
 }

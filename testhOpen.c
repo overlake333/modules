@@ -14,6 +14,12 @@
 
 
 int main(void){
+	hashtable_t *hash = hopen(10);
+	if (hash == NULL){
+		printf("failure, hashtable came back null\n");
+		
+	}
 
+	hclose(hash);
 	exit(EXIT_SUCCESS);
 }

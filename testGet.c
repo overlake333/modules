@@ -41,5 +41,6 @@ int main(void){
 	
 	
 	printf("testGet succeeded and got all elements as expected\n");
+	qclose(qp);
 	exit(EXIT_SUCCESS);
 }

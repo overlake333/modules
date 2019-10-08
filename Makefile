@@ -20,8 +20,8 @@ testGet: testGet.o queue.o
 testSearch: testSearch.o queue.o
 	gcc ${CFLAGS} queue.o testSearch.o -o $@
 
-testhOpen: testhOpen.o hash.o
-	gcc ${CFLAGS} hash.o testhOpen.o -o $@
+testhOpen: testhOpen.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhOpen.o queue.o -o $@
 
 clean:
 	rm -f *.o testOpen testPut testClose testGet testSearch

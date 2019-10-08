@@ -67,9 +67,6 @@ queue_t* qopen(void){
                                                                                                 
 
 /* deallocate a queue, frees everything in it */
-void makeNULL(queue_t **qp){
-	*qp = NULL;
-}
 void qclose(queue_t *qp){
 	 // Loop through all the elements of the queue freeing them up
 	 myQueue_t *mqp = (myQueue_t*)qp; //Switching queue_t to myQueue_t here
@@ -84,8 +81,6 @@ void qclose(queue_t *qp){
 	 elementPointer = nextElement;
 	 }
 	 // Finally free up the queue itself
-
-	 makeNULL(&qp);
  	 free(qp);
 
  } 

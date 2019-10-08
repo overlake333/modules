@@ -31,20 +31,6 @@ int main(void){
   }
 
 	printf("success putting in an item to a nonempty list and of different type\n");
-	
-	queue_t *qte;
-	qte = qopen();
-	qclose(qte);
-	if (qte == NULL){
-		printf("we should be stopping here!!!!\n");
-	}
-
-	// qte was opened but is now closed. qput should return nonzero
-	//if ((qput(qte, (void*)&z)) == 0){
-		//printf("failure: tried to add to a null queue\n");
-	//	exit(EXIT_FAILURE);
-	//	}
-
 	printf("successfully exited before trying to add to an empty queue\n");
 	printf("testPut succeeded\n");
   qclose(qt);   

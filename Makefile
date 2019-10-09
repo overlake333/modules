@@ -1,6 +1,6 @@
 CFLAGS=-Wall -pedantic -std=c11 -I. -g
 
-all: testOpen testPut testClose testGet testSearch testApply testCat
+all: testOpen testPut testClose testGet testSearch testApply testCat testhOpen
 
 %.o: %.c %.h
 	gcc ${CFLAGS} -c $<
@@ -29,7 +29,12 @@ testApply: testApply.o queue.o
 testhOpen: testhOpen.o queue.o hash.o
 	gcc ${CFLAGS} hash.o testhOpen.o queue.o -o $@
 
+testhClose: testhClose.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhClose.o queue.o -o $@
 
+testhPut: testhPut.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhPut.o queue.o -o $@
 
 clean:
-	rm -f *.o testOpen testPut testClose testGet testSearch
+	rm -f *.o testOpen testPut testClose testGet testSearch testApply testhOpen testhClose testhPut
+

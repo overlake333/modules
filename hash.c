@@ -62,7 +62,7 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
 
 typedef struct myHash_t{
   uint32_t size;
-  queue_t *table;
+  queue_t **table;
 
   
 } myHash_t;
@@ -75,9 +75,16 @@ static myHash_t *makeHash(uint32_t hsize){
   }
 
   ht->size = hsize;
-  queue_t *table = malloc(hsize);
- for(int i = 0; i < hsize; i++){
-(table+i) = qopen();
+	// make a table that holds hsize # of queue_t pointers!
+  queue_t **table = malloc(hsize*sizeof(queue_t *));
+ 
+	for(int i = 0; i < hsize; i++){
+		// go through the loop hsize # of times
+		// go to each memory address and set it equal to a new queue
+		// pointer is a pointer to a queue_t pointer
+		queue_t **pointer = table + i;
+		// set what pointer points to to be a pointer returned by qopen
+		*pointer = qopen();
   }
 
   ht->table = table;
@@ -85,6 +92,7 @@ static myHash_t *makeHash(uint32_t hsize){
 }
 
 hashtable_t *hopen(uint32_t hsize){
+	// just make a new hash table
   myHash_t *ht = makeHash(hsize);
   if(ht != NULL){
     return (hashtable_t *)ht;
@@ -95,21 +103,38 @@ hashtable_t *hopen(uint32_t hsize){
 }
 
 void hclose(hashtable_t *htp){
+	// coerce htp to a myHash and call it ht
   myHash_t *ht = (myHash_t *)htp;
-	queue_t *i[ht->size] = (ht->table);
-	
-  for(int q = 0; q < ht->size; q++){
-		qclose(i[q]);
+
+	// loop through the hash table closing the queues
+	for(int i = 0; i < ht->size; i++){
+		// notice that ht->table + i is a pointer to a pointer so we must dereference it
+		qclose(*((ht->table)+i));
   }
+	// free the hashtable itself
   free(ht);
 }
 
 
 int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
-  myHash_t *ht = (myHash_t *)htp;
+	//coerce the hash table
+	myHash_t *ht = (myHash_t *)htp;
+	// get an index
   uint32_t index = SuperFastHash(key, keylen, ht->size);
-
-  return qput(&((*ht).table)+index, ep);
+	// qput returns a 0 or 1 so we can just return whatever it returns
+	// (ht->table) gives us the address of the first queue in the array
+	// then add index + sizeof(queue_t) to go to the address of the indexed queue
+  return qput(*((ht->table)+index), ep);
 }
 
+// applies a function to every entry in the hash table
+void happly(hashtable_t *htp, void(*fn)(void* ep)){
+	// coerce the hash table as always
+	myHash_t *ht = (myHash_t *)htp;
+
+	// go through all the queues in the hash table and then just call qapply!
+	for(int i = 0; i < ht->size; i++){
+		qapply(*((ht->table)+i), fn);
+  }
+}
 

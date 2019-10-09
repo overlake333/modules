@@ -14,13 +14,8 @@
 
 
 int main(void){
-	hashtable_t *hash = hopen(0);
-	if (hash == NULL){
-		printf("failure, hashtable came back null\n");
-		exit(EXIT_FAILURE);
-	}
-
-	free(hash);
-	printf("testhOpen succeded\n");
+	hashtable_t *hash = hopen(10);
+	hclose(hash);
+	printf("testhClose succeded\n");
 	exit(EXIT_SUCCESS);
 }

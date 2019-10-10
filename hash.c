@@ -108,7 +108,7 @@ void hclose(hashtable_t *htp){
 
 	// loop through the hash table closing the queues
 	for(int i = 0; i < ht->size; i++){
-		// notice that ht->table + i is a pointer to a pointer so we must dereference it
+		// notice that ht->table + i is a pointer to a pointer so we must dereferene,ce it
 		qclose(*((ht->table)+i));
   }
 	// free the hashtable itself

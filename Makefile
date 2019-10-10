@@ -1,6 +1,6 @@
 CFLAGS=-Wall -pedantic -std=c11 -I. -g
 
-all: testOpen testPut testClose testGet testSearch testApply testCat testhOpen
+all: testOpen testPut testClose testGet testSearch testApply testCat testhOpen testhClose testhPutEmpty testhPutAgain testhPutAgainSameAddress testhApply
 
 %.o: %.c %.h
 	gcc ${CFLAGS} -c $<
@@ -32,9 +32,18 @@ testhOpen: testhOpen.o queue.o hash.o
 testhClose: testhClose.o queue.o hash.o
 	gcc ${CFLAGS} hash.o testhClose.o queue.o -o $@
 
-testhPut: testhPut.o queue.o hash.o
-	gcc ${CFLAGS} hash.o testhPut.o queue.o -o $@
+testhPutEmpty: testhPutEmpty.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhPutEmpty.o queue.o -o $@
+
+testhPutAgain: testhPutAgain.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhPutAgain.o queue.o -o $@
+
+testhPutAgainSameAddress: testhPutAgainSameAddress.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhPutAgainSameAddress.o queue.o -o $@
+
+testhApply: testhApply.o queue.o hash.o
+	gcc ${CFLAGS} hash.o testhApply.o queue.o -o $@
 
 clean:
-	rm -f *.o testOpen testPut testClose testGet testSearch testApply testhOpen testhClose testhPut
+	rm -f *.o testOpen testPut testClose testGet testSearch testApply testhOpen testhClose testhPutEmpty
 

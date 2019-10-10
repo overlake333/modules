@@ -1,2 +1,6 @@
 runtest.sh "testhOpen"
 runtest.sh "testhClose"
+runtest.sh "testhPutEmpty"
+runtest.sh "testhPutAgain"
+runtest.sh "testhPutAgainSameAddress"
+runtest.sh "testhApply"

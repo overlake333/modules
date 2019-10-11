@@ -1,7 +1,7 @@
 /* queue.c --- 
  * 
  * 
- * Author: James D. Fleming
+ * Author: James D. Fleming, Sudharsan B, Taylor O.
  * Created: Fri Oct  4 13:47:51 2019 (-0400)
  * Version: 
  * 
@@ -49,7 +49,7 @@ static myQueue_t *makeQueue(){
 static qElement_t *makeElement(void *elementp){
 	qElement_t *e;
 	if (!(e=(qElement_t*)malloc(sizeof(qElement_t)))){
-		printf("error creating element of queue");
+	  printf("error creating element of queue");
 		return NULL;
 	}
 	e->next = NULL;
@@ -83,13 +83,13 @@ void qclose(queue_t *qp){
 	 // Finally free up the queue itself
  	 free(qp);
 
- } 
+} 
                                                                                                 
 /* put element at the end of the queue */
 /*  * returns 0 is successful; nonzero otherwise */
 /*  *\/ */
- int32_t qput(queue_t *qp, void *elementp){
-	 // how can i test if it can correctly convert the queue
+int32_t qput(queue_t *qp, void *elementp){
+  // how can i test if it can correctly convert the queue
 	 myQueue_t *mqp = (myQueue_t*)qp;
 	 qElement_t *e;
 	 // make sure we can successfully make an qElement
@@ -216,16 +216,20 @@ void* qremove(queue_t *qp,
 /* q2 is dealocated, closed, and unusable upon completion */
 
 void qconcat(queue_t *q1p, queue_t *q2p){
-	myQueue_t *mqp1 = (myQueue_t*)q1p;
-	myQueue_t *mqp2 = (myQueue_t*)q2p;
-	// next pointer of back of q1 to be front of q2
-	(mqp1->back)->next = mqp2->front;
-	//back of q2 to be the back of q1
-	mqp1->back = mqp2->back;
-
-	// now just delete q2p
-	free(q2p);
-	
+  myQueue_t *mqp1 = (myQueue_t*)q1p;
+  myQueue_t *mqp2 = (myQueue_t*)q2p;
+  // next pointer of back of q1 to be front of q2
+  if(mqp1->front == NULL && mqp2->front == NULL){
+    mqp1->front = NULL;
+  } else if (mqp1->front == NULL && mqp2->front != NULL){
+    mqp1->front = mqp2->front;
+  } else {  
+    (mqp1->back)->next = mqp2->front;
+    //back of q2 to be the back of q1
+    mqp1->back = mqp2->back;  
+    // now just delete q2p
+  }
+    free(q2p);
 } 
                                                                                                 
                                                                                                 

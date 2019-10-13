@@ -153,9 +153,7 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 /*  *          -- returns TRUE or FALSE as defined in bool.h */
 /*  * returns a pointer to an element, or NULL if not found */
 
-void* qsearch(queue_t *qp, 
-							bool (*searchfn)(void* elementp,const void* keyp), 
-							const void* skeyp){ 
+void* qsearch(queue_t *qp, bool (*searchfn)(void* elementp,const void* keyp), const void* skeyp){ 
 	myQueue_t *mqp = (myQueue_t*)qp;
 
 	// go through each item

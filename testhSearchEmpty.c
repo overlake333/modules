@@ -56,7 +56,10 @@ int main(void){
     printf("Failure: No one should exist\n");
     exit(EXIT_FAILURE);
   }
-  
+
+	hclose(hp);
+	free(person1);
+	
   printf("testhSearchEmpty Succeeded!\n");
   exit(EXIT_SUCCESS);
 

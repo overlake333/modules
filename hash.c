@@ -117,24 +117,59 @@ void hclose(hashtable_t *htp){
 
 
 int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
-	//coerce the hash table
-	myHash_t *ht = (myHash_t *)htp;
-	// get an index
+  //coerce the hash table
+  myHash_t *ht = (myHash_t *)htp;
+  // get an index
   uint32_t index = SuperFastHash(key, keylen, ht->size);
-	// qput returns a 0 or 1 so we can just return whatever it returns
-	// (ht->table) gives us the address of the first queue in the array
-	// then add index + sizeof(queue_t) to go to the address of the indexed queue
+  // qput returns a 0 or 1 so we can just return whatever it returns
+  // (ht->table) gives us the address of the first queue in the array
+  // then add index + sizeof(queue_t) to go to the address of the indexed queue
   return qput(*((ht->table)+index), ep);
 }
 
 // applies a function to every entry in the hash table
 void happly(hashtable_t *htp, void(*fn)(void* ep)){
-	// coerce the hash table as always
-	myHash_t *ht = (myHash_t *)htp;
-
-	// go through all the queues in the hash table and then just call qapply!
-	for(int i = 0; i < ht->size; i++){
-		qapply(*((ht->table)+i), fn);
+  // coerce the hash table as always
+  myHash_t *ht = (myHash_t *)htp;
+  
+  // go through all the queues in the hash table and then just call qapply!
+  for(int i = 0; i < ht->size; i++){
+    qapply(*((ht->table)+i), fn);
   }
 }
+
+/* hsearch -- searchs for an entry under a designated key using a
+ * designated search fn -- returns a pointer to the entry or NULL if
+ * not found
+ */
+void *hsearch(hashtable_t *htp,
+              bool (*searchfn)(void* elementp, const void* searchkeyp),
+              const char *key,
+              int32_t keylen){
+  //c coerce the hash table to our own
+  myHash_t *ht = (myHash_t *)htp;
+  uint32_t index = SuperFastHash(key, keylen, ht->size);
+  queue_t *q = *((ht->table)+index);
+  
+  return qsearch(q, searchfn, key);
+}
+
+
+/* hremove -- removes and returns an entry under a designated key
+ * using a designated search fn -- returns a pointer to the entry or
+ * NULL if not found
+ */
+
+void *hremove(hashtable_t *htp,
+              bool (*searchfn)(void* elementp, const void* searchkeyp),
+              const char *key,
+              int32_t keylen){
+  myHash_t *ht = (myHash_t *)htp;
+  uint32_t index = SuperFastHash(key, keylen, ht->size);
+  queue_t *q = *((ht->table)+index);
+
+  return qremove(q, searchfn, key);
+}
+
+
 

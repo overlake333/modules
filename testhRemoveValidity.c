@@ -60,20 +60,11 @@ int main(void){
   hput(hp, (void *)person3, (const char *)person3->name, sizeof(person3->name));
   hput(hp, (void *)person4, (const char *)person4->name, sizeof(person4->name));
 
-  if(hsearch(hp, searchByName, (const char *)person1->name, sizeof(person1->name)) == NULL){
-    printf("Failure: Could not find Sud\n");
-    exit(EXIT_FAILURE);
-  }
-  if(hsearch(hp, searchByName, (const char *)person2->name, sizeof(person2->name)) == NULL){
-    printf("Failure: Could not find Taylor\n");
-    exit(EXIT_FAILURE);
-  }
-  if(hsearch(hp, searchByName, (const char *)person3->name, sizeof(person3->name)) == NULL){
-    printf("Failure: Could not find James\n");
-    exit(EXIT_FAILURE);
-  }
-  if(hsearch(hp, searchByName, (const char *)person4->name, sizeof(person4->name)) == NULL){
-    printf("Failure: Could not find Ben\n");
+  // Make sure we are returning the right values when we search for it
+
+  char *returnedName = hremove(hp, searchByName, (const char *)person1->name, sizeof(person1->name));
+  if(strcmp(returnedName,"Sudharsan") != 0){
+    printf("Failure: Someone returned, but not who we think!\n");
     exit(EXIT_FAILURE);
   }
 
@@ -82,8 +73,9 @@ int main(void){
 	free(person2);
 	free(person3);
 	free(person4);
+	free(returnedName);
 	
-  printf("testhSearchNonempty Succeeded, everone was found!\n");
+  printf("testhRemoveValidity Succeeded!\n");
   exit(EXIT_SUCCESS);
 
 

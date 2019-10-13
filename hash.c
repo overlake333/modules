@@ -112,7 +112,8 @@ void hclose(hashtable_t *htp){
 		qclose(*((ht->table)+i));
   }
 	// free the hashtable itself
-  free(ht);
+  free(ht->table);
+	free(ht);
 }
 
 
@@ -149,9 +150,8 @@ void *hsearch(hashtable_t *htp,
   //c coerce the hash table to our own
   myHash_t *ht = (myHash_t *)htp;
   uint32_t index = SuperFastHash(key, keylen, ht->size);
-  queue_t *q = *((ht->table)+index);
   
-  return qsearch(q, searchfn, key);
+  return qsearch(*((ht->table)+index), searchfn, key);
 }
 
 
@@ -166,9 +166,8 @@ void *hremove(hashtable_t *htp,
               int32_t keylen){
   myHash_t *ht = (myHash_t *)htp;
   uint32_t index = SuperFastHash(key, keylen, ht->size);
-  queue_t *q = *((ht->table)+index);
 
-  return qremove(q, searchfn, key);
+  return qremove(*((ht->table)+index), searchfn, key);
 }
 
 

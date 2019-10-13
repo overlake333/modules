@@ -77,6 +77,12 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
+	hclose(hp);
+	free(person1);
+	free(person2);
+	free(person3);
+	free(person4);
+	
   printf("testhSearch Succeeded, everone was found!\n");
   exit(EXIT_SUCCESS);
 

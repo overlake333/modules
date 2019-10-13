@@ -51,32 +51,16 @@ int main(void){
 
   // Make peoples, me and my amazing friends :)
   person_t *person1 = make_person("Sudharsan", 18); // Awesome Person
-  person_t *person2 = make_person("Taylor", 19); // Awesome Person
-  person_t *person3 = make_person("James", 200); // Sometimes Awesom Person
-  person_t *person4 = make_person("Ben Liu", 27); // Miss you!
 
-  hput(hp, (void *)person1, (const char *)person1->name, sizeof(person1->name));
-  hput(hp, (void *)person2, (const char *)person2->name, sizeof(person2->name));
-  hput(hp, (void *)person3, (const char *)person3->name, sizeof(person3->name));
-  hput(hp, (void *)person4, (const char *)person4->name, sizeof(person4->name));
-
-  // Make sure we are returning the right values when we search for it
-
-  char *returnedName = hsearch(hp, searchByName, (const char *)person1->name, sizeof(person1->name));
-  if(strcmp(returnedName,"Sudharsan") != 0){
-    printf("Failure: Someone returned, but not who we think!\n");
+  if(hremove(hp, searchByName, (const char *)person1->name, sizeof(person1->name)) != NULL){
+    printf("Failure: No one should exist\n");
     exit(EXIT_FAILURE);
   }
 
 	hclose(hp);
 	free(person1);
-	free(person2);
-	free(person3);
-	free(person4);
-	free(returnedName);
 	
-  printf("testhSearchValidity Succeeded!\n");
+  printf("testhRemoveEmpty Succeeded!\n");
   exit(EXIT_SUCCESS);
-
 
 }

@@ -176,9 +176,7 @@ void* qsearch(queue_t *qp, bool (*searchfn)(void* elementp,const void* keyp), co
 /*  * removes the element from the queue and returns a pointer to it or */
 /*  * NULL if not found */
 
-void* qremove(queue_t *qp,
-							bool (*searchfn)(void* elementp,const void* keyp), 
-							const void* skeyp){ 
+void* qremove(queue_t *qp, bool (*searchfn)(void* elementp,const void* keyp), const void* skeyp){ 
 	myQueue_t *mqp = (myQueue_t*)qp;
 
 	// go through each item
@@ -217,17 +215,19 @@ void qconcat(queue_t *q1p, queue_t *q2p){
   myQueue_t *mqp1 = (myQueue_t*)q1p;
   myQueue_t *mqp2 = (myQueue_t*)q2p;
   // next pointer of back of q1 to be front of q2
-  if(mqp1->front == NULL && mqp2->front == NULL){
-    mqp1->front = NULL;
-  } else if (mqp1->front == NULL && mqp2->front != NULL){
+
+  
+  if(mqp1->front == NULL){
     mqp1->front = mqp2->front;
-  } else {  
-    (mqp1->back)->next = mqp2->front;
-    //back of q2 to be the back of q1
-    mqp1->back = mqp2->back;  
-    // now just delete q2p
+    mqp1->back = mqp2->back;
+  } else if (mqp2->front != NULL){
+    qElement_t *temp = mqp1->back;
+    temp->next = mqp2->front;
+    mqp1->back = mqp2->back;
   }
-    free(q2p);
+
+  q1p = mqp1;
+  free(q2p);
 } 
                                                                                                 
                                                                                                 

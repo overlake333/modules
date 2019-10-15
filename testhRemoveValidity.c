@@ -73,7 +73,7 @@ int main(void){
 	free(person2);
 	free(person3);
 	free(person4);
-	free(returnedName);
+
 	
   printf("testhRemoveValidity Succeeded!\n");
   exit(EXIT_SUCCESS);

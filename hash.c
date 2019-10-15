@@ -166,7 +166,7 @@ void *hremove(hashtable_t *htp,
               int32_t keylen){
   myHash_t *ht = (myHash_t *)htp;
   uint32_t index = SuperFastHash(key, keylen, ht->size);
-
+  
   return qremove(*((ht->table)+index), searchfn, key);
 }
 

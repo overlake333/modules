@@ -20,7 +20,7 @@ int main(void){
 		exit(EXIT_FAILURE);
 	}
 
-	free(hash);
+	hclose(hash);
 	printf("testhOpen succeded\n");
 	exit(EXIT_SUCCESS);
 }

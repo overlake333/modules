@@ -67,14 +67,12 @@ int main(void){
     printf("Failure: Someone returned, but not who we think!\n");
     exit(EXIT_FAILURE);
   }
-
-	hclose(hp);
+  	hclose(hp);
 	free(person1);
 	free(person2);
 	free(person3);
 	free(person4);
-	free(returnedName);
-	
+  	
   printf("testhSearchValidity Succeeded!\n");
   exit(EXIT_SUCCESS);
 
